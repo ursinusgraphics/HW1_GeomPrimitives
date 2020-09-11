@@ -1,1 +1,5 @@
-# Indy1_GeomPrimitives
+# <a href = "http://www.ctralie.com/Teaching/CS476_F2019/">Ursinus CS 476, Fall 2019</a>
+## Instructor: Christopher Tralie
+## Individual Assignment 1 Part 1
+
+Please visit <a href = "http://www.ctralie.com/Teaching/CS476_F2020/Assignments/Indy1_GeomPrimitives">http://www.ctralie.com/Teaching/CS476_F2020/Assignments/Indy1_GeomPrimitives</a> for more information

@@ -3,7 +3,7 @@
 <head>
   <script src = "gl-matrix-min.js"></script>
   <script src = "plotly.min.js"></script>
-  <script src = "GeomPrimitives.js"></script>
+  <script src = "geomprimitives.js"></script>
   <script src = "tests.js"></script>
 </head>
 <body>
@@ -59,34 +59,40 @@ tests.forEach(function(item) {
     });
 
     // Now add the solution
-    let ans = fn.apply(null, args);
+    let correct = false;
+    let ans = "";
     let solans = eval(test.ans[0]).apply(null, test.ans[1]);
-    correct = false;
-    if (!(ans == null)) {
-      correct = eval(item.checkNear)(ans, solans);
-      ans = eval(item.outputformat)(ans);
+    try {
+      ans = fn.apply(null, args);
+      if (!(ans == null)) {
+        correct = eval(item.checkNear)(ans, solans);
+        ans = eval(item.outputformat)(ans);
+      }
     }
-    
-    let elem = document.createElement("td");
-    
-    if (correct) {
-      numCorrect += 1;
-      elem.innerHTML = "<font color = 'green'>" + ans + "</font>";
+    catch {
+      ans = "ERROR";
     }
-    else {
-      elem.innerHTML = "<font color = 'red'>" + ans + "</font>";
-    }
-    row.appendChild(elem);
-    elem = document.createElement("td");
-    elem.innerHTML = eval(item.outputformat)(solans);
-    row.appendChild(elem);
-    if ('comments' in test) {
-      elem = document.createElement("td");
-      elem.innerHTML = test.comments;
+    finally {
+      let elem = document.createElement("td");
+      if (correct) {
+        numCorrect += 1;
+        elem.innerHTML = "<font color = 'green'>" + ans + "</font>";
+      }
+      else {
+        elem.innerHTML = "<font color = 'red'>" + ans + "</font>";
+      }
       row.appendChild(elem);
-    }
+      elem = document.createElement("td");
+      elem.innerHTML = eval(item.outputformat)(solans);
+      row.appendChild(elem);
+      if ('comments' in test) {
+        elem = document.createElement("td");
+        elem.innerHTML = test.comments;
+        row.appendChild(elem);
+      }
 
-    table.appendChild(row);
+      table.appendChild(row);
+    }
   });
   results.appendChild(table);
 

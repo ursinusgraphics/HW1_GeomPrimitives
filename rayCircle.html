@@ -4,12 +4,13 @@
 <head>
 <!-- This is how you include external scripts in Javascript !-->
 <script src= "gl-matrix-min.js"></script>
-<script src = "GeomPrimitives.js"></script>
+<script src = "geomprimitives.js"></script>
+<script src = "guitools.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
-<h2><a name = "raysphere">Task 5: Ray Intersect Sphere (8 points)</h2>
+<h2><a name = "raysphere">Task 7: Ray Intersect Sphere (8 points)</h2>
 <h3>2D Circle Special Case Tester</h3>
 
 <p>
@@ -41,19 +42,19 @@
 </table>
 
 <script>
-var p0 = null;
-var p1 = null;
-var v = null;
-var c = null;
-var r = 0.0;
-var intersection = [];
-var selectingRay = true;
+let p0 = null;
+let p1 = null;
+let v = null;
+let c = null;
+let r = 0.0;
+let intersection = [];
+let selectingRay = true;
 
-var rayButton = document.getElementById("selectingRay");
-var circleButton = document.getElementById("selectingCircle");
+let rayButton = document.getElementById("selectingRay");
+let circleButton = document.getElementById("selectingCircle");
 
-var canvas = document.getElementById('segcanvas');
-var ctx = canvas.getContext("2d"); //For drawing
+let canvas = document.getElementById('segcanvas');
+let ctx = canvas.getContext("2d"); //For drawing
 //Need this to disable that annoying menu that pops up on right click
 canvas.addEventListener("contextmenu", function(e){ e.stopPropagation(); e.preventDefault(); return false; }); 
 
@@ -76,10 +77,10 @@ selectRay();
 
 function drawArrow(ctx, fromx, fromy, tox, toy, color){
     // From https://stackoverflow.com/questions/808826/draw-arrow-on-canvas-tag
-    //variables to be used when creating the arrow
-    var headlen = 5;
+    //letiables to be used when creating the arrow
+    let headlen = 5;
 
-    var angle = Math.atan2(toy-fromy,tox-fromx);
+    let angle = Math.atan2(toy-fromy,tox-fromx);
 
     //starting path of the arrow from the start square to the end square and drawing the stroke
     ctx.moveTo(fromx, fromy);
@@ -108,9 +109,9 @@ function drawArrow(ctx, fromx, fromy, tox, toy, color){
 }
 
 function repaint() {
-    var dW = 5;
-    var W = canvas.width;
-    var H = canvas.height;
+    let dW = 5;
+    let W = canvas.width;
+    let H = canvas.height;
     ctx.clearRect(0, 0, W, H);
 
     // Draw circle and center
@@ -150,10 +151,10 @@ function repaint() {
 
 
 function selectPoint(evt) {
-    var mousePos = getMousePos(canvas, evt);
-    var X = mousePos.X;
-    var Y = mousePos.Y
-    var clickType = "LEFT";
+    let mousePos = getMousePos(canvas, evt);
+    let X = mousePos.X;
+    let Y = mousePos.Y
+    let clickType = "LEFT";
 	evt.preventDefault();
 	if (evt.which) {
 	    if (evt.which == 3) clickType = "RIGHT";
