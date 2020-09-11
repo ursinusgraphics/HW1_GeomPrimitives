@@ -36,8 +36,9 @@ function vecToStr(v, k) {
 }
 
 PLOT_COLORS = {
-  "C0":"#0066ff", "C1":"#ff9933", "C2":"#33cc33", "C3":"#cc00ff"
-};
+  "C0":"#0066ff", "C1":"#ff9933", "C2":"#33cc33", "C3":"#cc00ff",
+  "C4":"#ff3300", "C5":"#996633"
+}; 
 
 
 /**
@@ -614,5 +615,116 @@ class BarycentricGUI {
           document.getElementById("p").innerHTML = "(" + p[0].toFixed(1) + "," + p[1].toFixed(1) + ")";
       }
       this.finalizePointSelection();
+  }
+}
+
+/**
+ * A class for managing the GUI for ray triangle intersection
+ */
+class RayTriangleGUI {
+  constructor() {
+    this.setupMenu();
+  }
+
+  /**
+   * Run the getAboveOrBelow() function using the chosen vectors
+   */
+  rayIntersectTriangle() {
+    let a = splitVecStr(this.a);
+    let b = splitVecStr(this.b);
+    let c = splitVecStr(this.c);
+    let p0 = splitVecStr(this.p0);
+    let v = splitVecStr(this.v);
+    try{
+      this.intersection = rayIntersectTriangle(p0, v, a, b, c);
+      if (this.intersection.length > 0) {
+        this.result = vecToStr(this.intersection[0]);
+      }
+      else {
+        this.result = "[]";
+      }
+      if (this.drawVectors) {
+        this.plotVectors();
+      }
+    }
+    catch(err) {
+      alert("There was an error with your getAboveOrBelow code!");
+      this.result = "error";
+      console.log(err);
+    }
+  }
+
+  /**
+   * Setup a menu with inputs for 4 vectors, as well as
+   * a button for computing and a text area for display
+   */
+  setupMenu() {
+    let menu = new dat.GUI();
+    this.menu = menu;
+    this.a = "0,0,0";
+    this.b = "0,0,0";
+    this.c = "0,0,0";
+    this.p0 = "0,0,0";
+    this.v = "0,0,0";
+    this.drawVectors = true;
+    this.result = "";
+    let triMenu = menu.addFolder("Triangle");
+    triMenu.add(this, "a");
+    triMenu.add(this, "b");
+    triMenu.add(this, "c");
+    let rayMenu = menu.addFolder("Ray");
+    rayMenu.add(this, "p0");
+    rayMenu.add(this, "v");
+    menu.add(this, "drawVectors");
+    menu.add(this, "rayIntersectTriangle");
+    menu.add(this, "result").listen();
+  }
+
+  plotVectors() {
+    let a = splitVecStr(this.a);
+    let b = splitVecStr(this.b);
+    let c = splitVecStr(this.c);
+    let p0 = splitVecStr(this.p0);
+    let v = splitVecStr(this.v);
+    // Triangle plot
+    let plots = getTrianglePlots(a, b, c);
+    // Vector plot
+    var p0viz = { x: [p0[0]], y: [p0[1]], z: [p0[2]],
+      mode: 'markers+lines', line: {color: '#ffffff', width: 10},
+      type: 'scatter3d', name: 'p0',
+      marker: {color: PLOT_COLORS["C3"], size: 10, symbol: 'circle'}
+    };
+    var vviz = { x: [p0[0], p0[0]+v[0]], y: [p0[1], p0[1]+v[1]], z: [p0[2], p0[2]+v[2]],
+      mode: 'lines', line: {color: PLOT_COLORS["C4"], width: 10},
+      type: 'scatter3d', name: 'v',
+    };
+    plots.push(p0viz);
+    plots.push(vviz);
+    // Intersection plot
+    let res = this.intersection;
+    if (res.length > 0) {
+      var dviz = { x: [res[0][0]], y: [res[0][1]], z: [res[0][2]],
+      mode: 'markers+lines', line: {color: "#ffffff", width: 10},
+      type: 'scatter3d', name: 'd',
+      marker: {color: PLOT_COLORS["C5"], size: 10, symbol: 'circle'}
+      };
+
+      var p0dviz = { x: [p0[0], res[0][0]], y: [p0[1], res[0][1]], z: [p0[2], res[0][2]],
+      mode: 'lines', line: {color: PLOT_COLORS["C5"], width: 10},
+      type: 'scatter3d', name: 'p0d',
+      };
+      plots.push(dviz);
+      plots.push(p0dviz);
+    }
+
+    let axes = getAxesEqual([a, b, c, p0]);
+    plots.push(axes.x);
+    plots.push(axes.y);
+    plots.push(axes.z);
+    let layout = {
+      autosize: false, width: 500, height: 500,
+      margin: { l: 0, r: 0, b: 0, t: 65 }
+    };
+    Plotly.newPlot('rayTriViz', plots, layout);  
   }
 }
