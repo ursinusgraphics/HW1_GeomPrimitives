@@ -1,4 +1,4 @@
-# <a href = "http://www.ctralie.com/Teaching/CS476_F2020/">Ursinus CS 476, Fall 2012</a>
+# <a href = "http://www.ctralie.com/Teaching/CS476_F2020/">Ursinus CS 476, Fall 2020</a>
 ## Instructor: Christopher Tralie
 ## Individual Assignment 1 
 
